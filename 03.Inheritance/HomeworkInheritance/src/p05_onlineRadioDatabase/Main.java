@@ -12,32 +12,42 @@ public class Main {
 
         int n = Integer.parseInt(in.nextLine());
         for (int i = 0; i < n; i++) {
-            String[] songArgs = in.nextLine().split(";");
-            String artistName = songArgs[0];
-            String songName = songArgs[1];
-            String[] lengthArgs = songArgs[2].split(":");
-            int minutes = Integer.parseInt(lengthArgs[0]);
-            int seconds = Integer.parseInt(lengthArgs[1]);
-
-            Length length = new Length(minutes, seconds);
-
-            Song song = null;
             try {
-                song = new Song(artistName, songName, length, minutes, seconds);
-                System.out.println("Song Added.");
-                count++;
-            } catch (InvalidSongException e) {
-                System.out.println(e.getMessage());
+                String[] songArgs = in.nextLine().split(";");
+                String artistName = songArgs[0];
+                String songName = songArgs[1];
+                String[] lengthArgs = songArgs[2].split(":");
+
+                try {
+                    int minutes = Integer.parseInt(lengthArgs[0]);
+                    int seconds = Integer.parseInt(lengthArgs[1]);
+
+                    Length length = new Length(minutes, seconds);
+
+                    Song song = null;
+                    try {
+                        song = new Song(artistName, songName, length, minutes, seconds);
+                        System.out.println("Song added.");
+                        count++;
+                    } catch (InvalidSongException e) {
+                        System.out.println(e.getMessage());
+                    }
+                } catch (Exception e) {
+                    System.out.println("Invalid song length.");
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid song.");
             }
         }
 
         System.out.println("Songs added: " + count);
 
-        BigInteger hours = Song.allSongsSeconds.mod(new BigInteger("3600"));
-        Song.allSongsSeconds = Song.allSongsSeconds.subtract(hours.multiply(new BigInteger("3600")));
 
-        BigInteger minutes = Song.allSongsSeconds.mod(new BigInteger("60"));
-        Song.allSongsSeconds = Song.allSongsSeconds.subtract(minutes.multiply(new BigInteger("60")));
+        BigInteger hours = Song.allSongsSeconds.divide(new BigInteger("3600"));
+        Song.allSongsSeconds = Song.allSongsSeconds.mod(new BigInteger("3600"));
+
+        BigInteger minutes = Song.allSongsSeconds.divide(new BigInteger("60"));
+        Song.allSongsSeconds = Song.allSongsSeconds.mod(new BigInteger("60"));
 
         BigInteger seconds = Song.allSongsSeconds;
 
