@@ -1,6 +1,5 @@
 package p04_shippingSpree;
 
-import java.net.PortUnreachableException;
 import java.util.ArrayList;
 import java.util.List;
 
