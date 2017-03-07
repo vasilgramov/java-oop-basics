@@ -5,8 +5,8 @@ import java.text.DecimalFormat;
 public class Truck extends Vehicle {
     private static final double AIR_CONDITIONER_CONSUMPTION = 1.6;
 
-    protected Truck(double fuelQuantity, double fuelConsumption) {
-        super(fuelQuantity, fuelConsumption + AIR_CONDITIONER_CONSUMPTION);
+    protected Truck(double fuelQuantity, double fuelConsumption, double tankCapacity) {
+        super(fuelQuantity, fuelConsumption, tankCapacity);
     }
 
     @Override
