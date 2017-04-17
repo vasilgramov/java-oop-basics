@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Tester {
 
-    public void compareContent(String actualOutput, String expectedOutput) {
+    public void compareContent(String actualOutput, String expectedOutput) throws IOException {
         try {
 
             OutputWriter.writeMessageOnNewLine("Reading files...");
@@ -29,7 +29,7 @@ public class Tester {
                 OutputWriter.writeMessageOnNewLine("Files are identical. There are no mismatches.");
             }
         } catch (IOException ioe) {
-            OutputWriter.displayException(ExceptionMessages.INVALID_PATH);
+            throw new IOException(ExceptionMessages.INVALID_PATH);
         }
     }
 

@@ -28,9 +28,18 @@ public class CommandInterpreter {
         this.ioManager = ioManager;
     }
 
-    public void interpretCommand(String input) throws IOException {
+    public void interpretCommand(String input) {
         String[] data = input.split("\\s+");
         String command = data[0].toLowerCase();
+
+        try {
+            parseCommand(input, data, command);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void parseCommand(String input, String[] data, String command) throws IOException {
         switch (command) {
             case "open":
                 this.tryOpenFile(input, data);

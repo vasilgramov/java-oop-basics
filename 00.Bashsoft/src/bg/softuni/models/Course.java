@@ -1,8 +1,10 @@
 package bg.softuni.models;
 
+import bg.softuni.exceptions.DuplicateEntryInStructureException;
 import bg.softuni.io.OutputWriter;
 import bg.softuni.staticData.ExceptionMessages;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -18,8 +20,8 @@ public class Course {
     private String name;
     private Map<String, Student> studentByName;
 
-    public Course(String name) {
-        this.name = name;
+    public Course(String courseName) {
+        this.setName(courseName);
         this.studentByName = new LinkedHashMap<>();
 
     }
@@ -28,8 +30,16 @@ public class Course {
         return this.name;
     }
 
+    private void setName(String courseName) {
+        if (courseName == null || courseName.trim().equals("")) {
+            throw new IllegalArgumentException(ExceptionMessages.NULL_OR_EMPTY_VALUE);
+        }
+
+        this.name = courseName;
+    }
+
     public Map<String, Student> getStudentByName() {
-        return this.studentByName;
+        return Collections.unmodifiableMap(this.studentByName);
     }
 
     public Student getStudentByName(String studentName) {
@@ -42,11 +52,7 @@ public class Course {
 
     public void enrollStudent(Student student) {
         if (this.studentByName.containsKey(student.getUserName())) {
-            OutputWriter.displayException(String.format(
-                    ExceptionMessages.STUDENT_ALREADY_ENROLLED_IN_GIVEN_COURSE, student.getUserName(), this.getName()
-            ));
-
-            return;
+            throw new DuplicateEntryInStructureException(student.getUserName(), this.getName());
         }
 
         this.studentByName.put(student.getUserName(), student);

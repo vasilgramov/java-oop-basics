@@ -16,8 +16,7 @@ public class RepositoryFilter {
         Predicate<Double> filter = createFilter(filterType);
 
         if (filter == null) {
-            OutputWriter.displayException(ExceptionMessages.INVALID_FILTER);
-            return;
+            throw new IllegalArgumentException(ExceptionMessages.INVALID_FILTER);
         }
 
         int studentsCount = 0;
