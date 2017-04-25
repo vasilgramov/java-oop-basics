@@ -13,8 +13,11 @@ import java.util.Map;
  */
 public class RaceManager implements Manager {
 
+    public static final String CANNOT_START_THE_RACE_WITH_ZERO_PARTICIPANTS = "Cannot start the race with zero participants.";
     private Map<Integer, Car> carById;
+
     private Map<Integer, Race> raceById;
+
     private Garage garage;
 
     public RaceManager() {
@@ -40,22 +43,49 @@ public class RaceManager implements Manager {
 
     @Override
     public void participate(int carId, int raceId) {
+        if (isInGarage(carId)) {
+            return;
+        }
+
         Car car = this.carById.get(carId);
         Race race = this.raceById.get(raceId);
 
-        race.addParticipant(car);
+        race.addParticipant(carId, car);
     }
 
     @Override
     public String startRace(int raceId) {
         Race race = this.raceById.get(raceId);
+        if (race.getParticipants().size() == 0) {
+            return CANNOT_START_THE_RACE_WITH_ZERO_PARTICIPANTS;
+        }
+
+        this.raceById.remove(raceId);
         return race.start();
     }
 
     @Override
     public void park(int carId) {
-        Car car = this.carById.remove(carId);
+        if (isInRace(carId)) {
+            return;
+        }
+
+        Car car = this.carById.get(carId);
         this.garage.park(carId, car);
+    }
+
+    private boolean isInRace(int carId) {
+        for (Race race : this.raceById.values()) {
+            if (race.getParticipants().containsKey(carId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isInGarage(int carId) {
+        return this.garage.contains(carId);
     }
 
     @Override
@@ -64,5 +94,9 @@ public class RaceManager implements Manager {
         this.carById.put(carId, unpark);
     }
 
+    @Override
+    public void tune(int tuneIndex, String tuneAddOn) {
+        this.garage.tune(tuneIndex, tuneAddOn);
+    }
 
 }

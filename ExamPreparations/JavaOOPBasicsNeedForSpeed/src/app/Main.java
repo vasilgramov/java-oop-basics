@@ -1,5 +1,15 @@
 package app;
 
+import app.core.Engine;
+import app.core.iterpretators.CommandInterpretator;
+import app.core.iterpretators.Interpretator;
+import app.core.managers.Manager;
+import app.core.managers.RaceManager;
+import app.io.readers.ConsoleReader;
+import app.io.readers.Reader;
+import app.io.writers.ConsoleWriter;
+import app.io.writers.Writer;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,14 +20,12 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Map<Integer, String> asd = new HashMap<>();
-        asd.put(1, "asd");
-        asd.put(2, "sdasd");
-        asd.put(3, "dsa");
+        Reader reader = new ConsoleReader();
+        Writer writer = new ConsoleWriter();
+        Manager manager = new RaceManager();
+        Interpretator interpretator = new CommandInterpretator(manager);
+        Runnable engine = new Engine(reader, writer, interpretator);
 
-
-        asd.remove(2);
-
-        System.out.println();
+        engine.run();
     }
 }

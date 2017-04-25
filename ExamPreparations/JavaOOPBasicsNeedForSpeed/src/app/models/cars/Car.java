@@ -5,7 +5,6 @@ package app.models.cars;
  */
 public interface Car {
 
-
     String getName();
 
     String getModel();
@@ -25,4 +24,7 @@ public interface Car {
     int getEnginePerformance();
 
     int getSuspensionPerformance();
+
+    void tune(int tuneIndex, String tuneAddOn);
+
 }

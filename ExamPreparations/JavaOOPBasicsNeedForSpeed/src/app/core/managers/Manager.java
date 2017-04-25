@@ -22,4 +22,6 @@ public interface Manager {
     void park(int carId);
 
     void unpark(int carId);
+
+    void tune(int tuneIndex, String tuneAddOn);
 }

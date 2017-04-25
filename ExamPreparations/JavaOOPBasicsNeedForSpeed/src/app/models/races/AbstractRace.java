@@ -2,9 +2,7 @@ package app.models.races;
 
 import app.models.cars.Car;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -15,14 +13,14 @@ public abstract class AbstractRace implements Race {
     private int length;
     private String route;
     private int prizePool;
-    private List<Car> participants;
+    private Map<Integer, Car> participants;
 
     public AbstractRace(int length, String route, int prizePool) {
         this.length = length;
         this.route = route;
         this.prizePool = prizePool;
 
-        this.participants = new ArrayList<>();
+        this.participants = new LinkedHashMap<>();
     }
 
     @Override
@@ -41,36 +39,34 @@ public abstract class AbstractRace implements Race {
     }
 
     @Override
-    public List<Car> getParticipants() {
+    public Map<Integer, Car> getParticipants() {
         return this.participants;
     }
 
     @Override
-    public void addParticipant(Car car) {
-        this.participants.add(car);
+    public void addParticipant(int id, Car car) {
+        this.participants.put(id, car);
     }
 
     @Override
     public String start() {
-        List<Car> participants = this.getParticipants();
-        List<Car> result = participants.stream()
-                .sorted(this.getComparator())
-                .limit(3)
-                .collect(Collectors.toList());
+        Map<Car, Integer> winners = this.getWinners();
 
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("%s - %s", this.getRoute(), this.getLength()))
                 .append(System.lineSeparator());
 
         int[] prices = getPrices();
-
-        for (int i = 1; i <= result.size(); i++) {
-            Car car = result.get(i - 1);
+        int index = 1;
+        for (Map.Entry<Car, Integer> carIntegerEntry : winners.entrySet()) {
+            Car car = carIntegerEntry.getKey();
             builder.append(String.format("%s. %s %s %sPP - $%s",
-                    i, car.getName(), car.getModel(), car.getOverallPerformance(), prices[i - 1]))
+                    index, car.getName(), car.getModel(), carIntegerEntry.getValue(), prices[index - 1]))
                     .append(System.lineSeparator());
+            index++;
         }
 
+        this.participants = new HashMap<>();
         return builder.toString().trim();
     }
 
@@ -82,5 +78,6 @@ public abstract class AbstractRace implements Race {
         return prices;
     }
 
-    protected abstract Comparator<Car> getComparator();
+    protected abstract Map<Car, Integer> getWinners();
+
 }

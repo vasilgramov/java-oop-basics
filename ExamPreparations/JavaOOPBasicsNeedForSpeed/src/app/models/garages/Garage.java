@@ -11,4 +11,8 @@ public interface Garage {
 
     Car unpark(int id);
 
+    boolean contains(int id);
+
+    void tune(int tuneIndex, String tuneAddOn);
+
 }

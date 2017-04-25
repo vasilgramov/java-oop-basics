@@ -29,7 +29,7 @@ public class PerformanceCar extends AbstractCar {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder(super.toString());
-        builder.append(System.lineSeparator()).append(this.listAddons());
+        builder.append(System.lineSeparator()).append(String.format("Add-ons: %s", this.listAddons()));
         return builder.toString();
     }
 
@@ -42,12 +42,17 @@ public class PerformanceCar extends AbstractCar {
     }
 
     private void calcHorsePower() {
-        super.horsePower = (super.getHorsePower() * 50) / 100;
+        super.horsePower = super.getHorsePower() + (super.getHorsePower() * 50) / 100;
     }
 
     private void calcSuspension() {
-        super.suspension = (super.getSuspension() * 25) / 100;
+        super.suspension = super.getSuspension() - (super.getSuspension() * 25) / 100;
     }
 
-
+    @Override
+    public void tune(int tuneIndex, String tuneAddOn) {
+        super.horsePower = super.horsePower + tuneIndex;
+        super.suspension = super.suspension + (tuneIndex / 2);
+        this.addons.add(tuneAddOn);
+    }
 }

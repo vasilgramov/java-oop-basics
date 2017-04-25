@@ -7,7 +7,9 @@ public class ConsoleWriter implements Writer {
 
     @Override
     public void writeLine(String line) {
-        System.out.println(line);
+        if (line != null) {
+            System.out.println(line);
+        }
     }
 
 }

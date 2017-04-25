@@ -15,15 +15,18 @@ public class ShowCar extends AbstractCar {
         return this.stars;
     }
 
-    private void setStars(int stars) {
-        this.stars = stars;
-    }
-
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder(super.toString());
         builder.append(System.lineSeparator()).append(String.format("%s *", this.getStars()));
 
         return builder.toString();
+    }
+
+    @Override
+    public void tune(int tuneIndex, String tuneAddOn) {
+        super.horsePower = super.horsePower + tuneIndex;
+        super.suspension = super.suspension + (tuneIndex / 2);
+        this.stars = this.stars + tuneIndex;
     }
 }
